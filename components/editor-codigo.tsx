@@ -14,7 +14,7 @@ interface EditorCodigoProps {
 
 export function EditorCodigo({ codigo, setCodigo, lenguaje, lineasEditables = [] }: EditorCodigoProps) {
   const [lineas, setLineas] = useState<string[]>([])
-  const editorRef = useRef<HTMLDivElement>(null)
+  const editorRef = useRef<HTMLPreElement>(null)
   const numerosRef = useRef<HTMLDivElement>(null)
 
   // Actualizar las líneas numeradas cuando cambia el código

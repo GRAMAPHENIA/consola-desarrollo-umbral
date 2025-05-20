@@ -27,14 +27,14 @@ export function PanelErrores({ errores, erroresCorregidos }: PanelErroresProps) 
             <Alert
               key={index}
               variant={estaCorregido ? "default" : error.tipo === "error" ? "destructive" : "default"}
-              className={estaCorregido ? "border-green-500 bg-green-500/10" : ""}
+              className={estaCorregido ? "border-teal-500 bg-teal-500/10" : ""}
             >
-              {estaCorregido ? <CheckCircle className="h-4 w-4 text-green-500" /> : <AlertCircle className="h-4 w-4" />}
+              {estaCorregido ? <CheckCircle className="h-4 w-4 text-teal-500" /> : <AlertCircle className="h-4 w-4" />}
 
               <AlertTitle className="flex items-center gap-2">
                 {estaCorregido ? (
                   <>
-                    <CheckCircle className="h-4 w-4 text-green-500" /> Error corregido en línea {error.linea}
+                    <CheckCircle className="h-4 w-4 text-teal-500" /> Error corregido en línea {error.linea}
                   </>
                 ) : error.tipo === "error" ? (
                   <>

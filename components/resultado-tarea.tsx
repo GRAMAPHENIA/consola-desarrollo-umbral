@@ -17,7 +17,7 @@ export function ResultadoTarea({ tarea, onCerrar, esUltimaTarea, puntosNLP }: Re
       <Card className="w-full max-w-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-green-500" />
+            <CheckCircle2 className="h-5 w-5 text-teal-500" />
             ¡Tarea Completada!
           </CardTitle>
         </CardHeader>
