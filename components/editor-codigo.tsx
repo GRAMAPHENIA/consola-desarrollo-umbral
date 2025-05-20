@@ -154,58 +154,55 @@ export function EditorCodigo({ codigo, setCodigo, lenguaje, lineasEditables = []
   }
 
   return (
-    <div className="border rounded-md overflow-hidden bg-muted/30 h-full">
-      <div className="flex items-center justify-between p-2 bg-muted/50 border-b">
-        <span className="text-sm font-medium">Editor de Código - {lenguaje}</span>
-        <span className="text-xs text-muted-foreground">Líneas: {lineas.length}</span>
+    <div className="flex h-full bg-background text-foreground font-mono text-sm overflow-hidden">
+      {/* Números de línea */}
+      <div
+        ref={numerosRef}
+        className="select-none text-right pr-4 py-2 text-muted-foreground bg-muted/50 overflow-y-auto"
+        style={{ 
+          minWidth: '3rem',
+          maxHeight: '100%',
+          scrollbarWidth: 'thin'
+        }}
+      >
+        {lineas.map((linea, index) => (
+          <div key={index} className="h-6 leading-6">
+            {linea}
+          </div>
+        ))}
       </div>
-      <div className="flex h-[320px]">
-        {/* Números de línea */}
-        <div
-          ref={numerosRef}
-          className="p-2 bg-muted/20 text-right border-r w-12 h-full overflow-y-auto scrollbar-hide"
-        >
-          {lineas.map((num, index) => {
-            // Determinar si esta línea es editable
-            const esEditable = lineasEditables.includes(Number.parseInt(num))
 
-            return (
-              <div
-                key={num}
-                className={cn(
-                  "text-xs leading-5 h-5",
-                  esEditable ? "text-primary font-medium" : "text-muted-foreground",
-                )}
-              >
-                {num}
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Editor de código simplificado */}
+      {/* Editor de código */}
+      <div className="flex-1 flex flex-col overflow-hidden">
         <pre
           ref={editorRef}
           contentEditable
           suppressContentEditableWarning
           onInput={handleInput}
           onKeyDown={handleKeyDown}
-          className="flex-1 h-full font-mono text-sm p-2 overflow-y-auto outline-none"
-          spellCheck="false"
+          className="flex-1 overflow-auto p-2 outline-none"
+          style={{ 
+            tabSize: 2,
+            minHeight: '400px',
+            scrollbarWidth: 'thin'
+          }}
         >
-          {codigo.split("\n").map((linea, index) => {
-            // Los índices de línea en el código empiezan en 0, pero visualmente empiezan en 1
-            const lineaVisual = index + 1
-            const esEditable = lineasEditables.includes(lineaVisual) || lineasEditables.length === 0
-            const { codigo: codigoParte, comentario } = separarComentarios(linea)
+        {codigo.split("\n").map((linea, index) => {
+          // Los índices de línea en el código empiezan en 0, pero visualmente empiezan en 1
+          const lineaVisual = index + 1
+          const esEditable = lineasEditables.includes(lineaVisual) || lineasEditables.length === 0
+          const { codigo: codigoParte, comentario } = separarComentarios(linea)
 
-            return (
-              <div key={index} className={cn("leading-5 h-5", !esEditable && "text-muted-foreground bg-muted/20")}>
-                <span className={esEditable ? "" : "text-muted-foreground"}>{codigoParte}</span>
-                {comentario && <span className="text-muted-foreground">{comentario}</span>}
-              </div>
-            )
-          })}
+          return (
+            <div key={index} className={cn(
+              "leading-6 h-6",
+              esEditable ? "" : "text-muted-foreground bg-muted/20"
+            )}>
+              <span className={esEditable ? "" : "text-muted-foreground"}>{codigoParte}</span>
+              {comentario && <span className="text-muted-foreground">{comentario}</span>}
+            </div>
+          )
+        })}
         </pre>
       </div>
     </div>

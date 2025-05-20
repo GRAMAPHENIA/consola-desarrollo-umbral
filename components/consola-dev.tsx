@@ -1,131 +1,147 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { AlertCircle, CheckCircle2, Code2, FileCode2, Terminal, FileText, Info, BookOpen, Lightbulb } from "lucide-react"
-import { EditorCodigo } from "@/components/editor-codigo"
-import { PanelErrores } from "@/components/panel-errores"
-import { ResultadoTarea } from "@/components/resultado-tarea"
-import { obtenerTareaActual, guardarProgreso } from "@/lib/progreso"
-import type { Tarea, Error } from "@/types/tarea"
-import { tareas } from "@/data/tareas"
-import { CambiadorTema } from "@/components/cambiador-tema"
-import { PuntosNLP } from "@/components/puntos-nlp"
-import { PantallaInicial } from "@/components/pantalla-inicial"
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Code2,
+  FileCode2,
+  Terminal,
+  FileText,
+  Info,
+  BookOpen,
+  Lightbulb,
+} from "lucide-react";
+import { EditorCodigo } from "@/components/editor-codigo";
+import { PanelErrores } from "@/components/panel-errores";
+import { ResultadoTarea } from "@/components/resultado-tarea";
+import { obtenerTareaActual, guardarProgreso } from "@/lib/progreso";
+import type { Tarea, Error } from "@/types/tarea";
+import { tareas } from "@/data/tareas";
+import { CambiadorTema } from "@/components/cambiador-tema";
+import { PuntosNLP } from "@/components/puntos-nlp";
+import { PantallaInicial } from "@/components/pantalla-inicial";
 
 export default function ConsolaDev() {
-  const [tareaActual, setTareaActual] = useState<Tarea | null>(null)
-  const [nivelActual, setNivelActual] = useState<number>(1)
-  const [codigo, setCodigo] = useState<string>("")
-  const [mostrarResultado, setMostrarResultado] = useState<boolean>(false)
-  const [completado, setCompletado] = useState<boolean>(false)
-  const [puntosNLP, setPuntosNLP] = useState<number>(0)
-  const [mostrarConsola, setMostrarConsola] = useState<boolean>(false)
-  const [erroresActivos, setErroresActivos] = useState<Error[]>([])
-  const [erroresCorregidos, setErroresCorregidos] = useState<number[]>([])
+  const [tareaActual, setTareaActual] = useState<Tarea | null>(null);
+  const [nivelActual, setNivelActual] = useState<number>(1);
+  const [codigo, setCodigo] = useState<string>("");
+  const [mostrarResultado, setMostrarResultado] = useState<boolean>(false);
+  const [completado, setCompletado] = useState<boolean>(false);
+  const [puntosNLP, setPuntosNLP] = useState<number>(0);
+  const [mostrarConsola, setMostrarConsola] = useState<boolean>(false);
+  const [erroresActivos, setErroresActivos] = useState<Error[]>([]);
+  const [erroresCorregidos, setErroresCorregidos] = useState<number[]>([]);
 
   // Cargar el progreso guardado al iniciar
   useEffect(() => {
-    const progresoGuardado = obtenerTareaActual()
-    const nivel = progresoGuardado?.nivel || 1
-    const puntos = progresoGuardado?.puntosNLP || 0
+    const progresoGuardado = obtenerTareaActual();
+    const nivel = progresoGuardado?.nivel || 1;
+    const puntos = progresoGuardado?.puntosNLP || 0;
 
-    setNivelActual(nivel)
-    setPuntosNLP(puntos)
+    setNivelActual(nivel);
+    setPuntosNLP(puntos);
 
-    const tarea = tareas.find((t) => t.nivel === nivel)
+    const tarea = tareas.find((t) => t.nivel === nivel);
     if (tarea) {
-      setTareaActual(tarea)
-      setCodigo(tarea.codigoInicial)
-      setErroresActivos(tarea.errores)
-      setErroresCorregidos([])
+      setTareaActual(tarea);
+      setCodigo(tarea.codigoInicial);
+      setErroresActivos(tarea.errores);
+      setErroresCorregidos([]);
     }
-  }, [])
+  }, []);
 
   // Verificar si se han corregido errores cuando cambia el código
   useEffect(() => {
-    if (!tareaActual) return
+    if (!tareaActual) return;
 
     // Verificar cada error para ver si ha sido corregido
-    const nuevosErroresCorregidos: number[] = []
+    const nuevosErroresCorregidos: number[] = [];
 
     tareaActual.errores.forEach((error, index) => {
       // Verificar si el error ha sido corregido
-      const estaCorregido = tareaActual.verificarErrorCorregido(codigo, error.linea)
+      const estaCorregido = tareaActual.verificarErrorCorregido(
+        codigo,
+        error.linea
+      );
 
       if (estaCorregido) {
-        nuevosErroresCorregidos.push(index)
+        nuevosErroresCorregidos.push(index);
       }
-    })
+    });
 
-    setErroresCorregidos(nuevosErroresCorregidos)
-  }, [codigo, tareaActual])
+    setErroresCorregidos(nuevosErroresCorregidos);
+  }, [codigo, tareaActual]);
 
   // Verificar si el código resuelve la tarea
   const verificarSolucion = () => {
-    if (!tareaActual) return
+    if (!tareaActual) return;
 
     // Comparamos con la solución o verificamos mediante una función
-    const esCorrecto = tareaActual.verificarSolucion(codigo)
+    const esCorrecto = tareaActual.verificarSolucion(codigo);
 
     if (esCorrecto) {
-      setMostrarResultado(true)
+      setMostrarResultado(true);
       // Incrementar puntos NLP
-      const nuevosPuntos = puntosNLP + 1
-      setPuntosNLP(nuevosPuntos)
+      const nuevosPuntos = puntosNLP + 1;
+      setPuntosNLP(nuevosPuntos);
 
       // Si es la última tarea, marcar como completado
       if (nivelActual >= tareas.length) {
-        setCompletado(true)
+        setCompletado(true);
       }
 
       // Guardar progreso
-      guardarProgreso(nivelActual, nuevosPuntos)
+      guardarProgreso(nivelActual, nuevosPuntos);
     } else {
       // Mostrar mensaje de error
-      alert("La solución no es correcta. Revisa los errores e inténtalo de nuevo.")
+      alert(
+        "La solución no es correcta. Revisa los errores e inténtalo de nuevo."
+      );
     }
-  }
+  };
 
   // Avanzar a la siguiente tarea
   const siguienteTarea = () => {
-    const siguienteNivel = nivelActual + 1
+    const siguienteNivel = nivelActual + 1;
 
     if (siguienteNivel <= tareas.length) {
-      const nuevaTarea = tareas.find((t) => t.nivel === siguienteNivel)
+      const nuevaTarea = tareas.find((t) => t.nivel === siguienteNivel);
       if (nuevaTarea) {
-        setTareaActual(nuevaTarea)
-        setCodigo(nuevaTarea.codigoInicial)
-        setNivelActual(siguienteNivel)
-        setMostrarResultado(false)
-        setErroresActivos(nuevaTarea.errores)
-        setErroresCorregidos([])
+        setTareaActual(nuevaTarea);
+        setCodigo(nuevaTarea.codigoInicial);
+        setNivelActual(siguienteNivel);
+        setMostrarResultado(false);
+        setErroresActivos(nuevaTarea.errores);
+        setErroresCorregidos([]);
 
         // Guardar progreso
-        guardarProgreso(siguienteNivel, puntosNLP)
+        guardarProgreso(siguienteNivel, puntosNLP);
       }
     } else {
-      setCompletado(true)
+      setCompletado(true);
     }
-  }
+  };
 
   const handlePantallaInicialCompleta = () => {
-    setMostrarConsola(true)
-  }
+    setMostrarConsola(true);
+  };
 
   if (!mostrarConsola) {
-    return <PantallaInicial onComplete={handlePantallaInicialCompleta} />
+    return <PantallaInicial onComplete={handlePantallaInicialCompleta} />;
   }
 
   if (!tareaActual) {
-    return <div>Cargando...</div>
+    return <div>Cargando...</div>;
   }
 
   // Calcular el número de errores pendientes
-  const erroresPendientes = tareaActual.errores.length - erroresCorregidos.length
+  const erroresPendientes =
+    tareaActual.errores.length - erroresCorregidos.length;
 
   return (
     <Card className="w-full max-w-5xl border border-dashed shadow-lg">
@@ -147,22 +163,38 @@ export default function ConsolaDev() {
         <Tabs defaultValue="codigo" className="w-full">
           <div className="border-b border-dashed">
             <TabsList className="p-0 bg-transparent border-b-0">
-              <TabsTrigger value="codigo" className="data-[state=active]:border-b-2 rounded-none">
+              <TabsTrigger
+                value="codigo"
+                className="data-[state=active]:border-b-2 rounded-none"
+              >
                 <Code2 className="h-4 w-4 mr-2" />
                 Código
               </TabsTrigger>
-              <TabsTrigger value="errores" className="data-[state=active]:border-b-2 rounded-none">
+              <TabsTrigger
+                value="errores"
+                className="data-[state=active]:border-b-2 rounded-none"
+              >
                 <div className="flex items-center">
                   <AlertCircle className="h-4 w-4 mr-2" />
-                  {erroresPendientes > 0 && <span className="text-zinc-800 font-medium mr-1">{erroresPendientes}</span>}
+                  {erroresPendientes > 0 && (
+                    <span className="text-zinc-800 font-medium mr-1">
+                      {erroresPendientes}
+                    </span>
+                  )}
                   Errores
                 </div>
               </TabsTrigger>
-              <TabsTrigger value="instrucciones" className="data-[state=active]:border-b-2 rounded-none">
+              <TabsTrigger
+                value="instrucciones"
+                className="data-[state=active]:border-b-2 rounded-none"
+              >
                 <FileCode2 className="h-4 w-4 mr-2" />
                 Instrucciones
               </TabsTrigger>
-              <TabsTrigger value="documentacion" className="data-[state=active]:border-b-2 rounded-none">
+              <TabsTrigger
+                value="documentacion"
+                className="data-[state=active]:border-b-2 rounded-none"
+              >
                 <FileText className="h-4 w-4 mr-2" />
                 Documentación
               </TabsTrigger>
@@ -203,7 +235,10 @@ export default function ConsolaDev() {
                   </h3>
                 </div>
                 <div className="flex-1 overflow-auto">
-                  <PanelErrores errores={tareaActual.errores} erroresCorregidos={erroresCorregidos} />
+                  <PanelErrores
+                    errores={tareaActual.errores}
+                    erroresCorregidos={erroresCorregidos}
+                  />
                 </div>
               </div>
             </TabsContent>
@@ -246,15 +281,24 @@ export default function ConsolaDev() {
                       <ul className="space-y-3 text-foreground/80 pl-2">
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          <span>Revisa la pestaña de errores para ver los problemas detectados</span>
+                          <span>
+                            Revisa la pestaña de errores para ver los problemas
+                            detectados
+                          </span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          <span>Haz clic en "Verificar Solución" para validar tus cambios</span>
+                          <span>
+                            Haz clic en "Verificar Solución" para validar tus
+                            cambios
+                          </span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-primary mr-2 mt-1">•</span>
-                          <span>Utiliza la documentación como referencia cuando lo necesites</span>
+                          <span>
+                            Utiliza la documentación como referencia cuando lo
+                            necesites
+                          </span>
                         </li>
                       </ul>
                     </div>
@@ -263,9 +307,14 @@ export default function ConsolaDev() {
               </div>
             </TabsContent>
 
-            <TabsContent value="documentacion" className="p-0 m-0 h-[500px] overflow-hidden">
+            <TabsContent
+              value="documentacion"
+              className="p-0 m-0 h-[500px] overflow-hidden"
+            >
               <div className="h-full flex flex-col p-6">
-                <h2 className="text-2xl font-bold mb-6 text-foreground">Documentación de Ayuda</h2>
+                <h2 className="text-2xl font-bold mb-6 text-foreground">
+                  Documentación de Ayuda
+                </h2>
                 <div className="flex-1 overflow-y-auto pr-2">
                   {tareaActual.documentacion ? (
                     <div className="space-y-8">
@@ -276,16 +325,29 @@ export default function ConsolaDev() {
                         </h3>
                         <div className="space-y-3 pl-2">
                           <p className="flex items-start">
-                            <span className="font-medium text-foreground/90 min-w-[60px]">Tipo:</span>
-                            <span className="text-foreground/80">{tareaActual.tipo.charAt(0).toUpperCase() + tareaActual.tipo.slice(1)}</span>
+                            <span className="font-medium text-foreground/90 min-w-[60px]">
+                              Tipo:
+                            </span>
+                            <span className="text-foreground/80">
+                              {tareaActual.tipo.charAt(0).toUpperCase() +
+                                tareaActual.tipo.slice(1)}
+                            </span>
                           </p>
                           <p className="flex items-start">
-                            <span className="font-medium text-foreground/90 min-w-[60px]">Objetivo:</span>
-                            <span className="text-foreground/80">{tareaActual.objetivo}</span>
+                            <span className="font-medium text-foreground/90 min-w-[60px]">
+                              Objetivo:
+                            </span>
+                            <span className="text-foreground/80">
+                              {tareaActual.objetivo}
+                            </span>
                           </p>
                           <p className="flex items-start">
-                            <span className="font-medium text-foreground/90 min-w-[60px]">Punto NLP:</span>
-                            <span className="text-foreground/80">{tareaActual.puntoNLP}</span>
+                            <span className="font-medium text-foreground/90 min-w-[60px]">
+                              Punto NLP:
+                            </span>
+                            <span className="text-foreground/80">
+                              {tareaActual.puntoNLP}
+                            </span>
                           </p>
                         </div>
                       </div>
@@ -296,11 +358,16 @@ export default function ConsolaDev() {
                           Guía de Solución
                         </h3>
                         <div className="prose dark:prose-invert max-w-none text-foreground/90 space-y-4 pl-2">
-                          <div dangerouslySetInnerHTML={{ 
-                            __html: tareaActual.documentacion 
-                              ? tareaActual.documentacion.replace(/<p>/g, '<p class="mb-4 last:mb-0">')
-                              : '' 
-                          }} />
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: tareaActual.documentacion
+                                ? tareaActual.documentacion.replace(
+                                    /<p>/g,
+                                    '<p class="mb-4 last:mb-0">'
+                                  )
+                                : "",
+                            }}
+                          />
                         </div>
                       </div>
 
@@ -313,16 +380,27 @@ export default function ConsolaDev() {
                           {tareaActual.errores.map((error, index) => (
                             <li key={index} className="flex items-start">
                               <span className="text-primary mr-2 mt-1">•</span>
-                              <span><span className="font-medium">Línea {error.linea}:</span> {error.mensaje}</span>
+                              <span>
+                                <span className="font-medium">
+                                  Línea {error.linea}:
+                                </span>{" "}
+                                {error.mensaje}
+                              </span>
                             </li>
                           ))}
                           <li className="flex items-start">
                             <span className="text-primary mr-2 mt-1">•</span>
-                            <span>Revisa la pestaña de errores para ver los problemas detectados</span>
+                            <span>
+                              Revisa la pestaña de errores para ver los
+                              problemas detectados
+                            </span>
                           </li>
                           <li className="flex items-start">
                             <span className="text-primary mr-2 mt-1">•</span>
-                            <span>Haz clic en "Verificar Solución" para validar tus cambios</span>
+                            <span>
+                              Haz clic en "Verificar Solución" para validar tus
+                              cambios
+                            </span>
                           </li>
                         </ul>
                       </div>
@@ -331,18 +409,22 @@ export default function ConsolaDev() {
                     <div className="flex items-center justify-center h-full">
                       <div className="text-center p-6 max-w-md">
                         <Info className="mx-auto h-12 w-12 text-muted-foreground" />
-                        <h3 className="mt-3 text-lg font-medium text-foreground">Sin documentación disponible</h3>
+                        <h3 className="mt-3 text-lg font-medium text-foreground">
+                          Sin documentación disponible
+                        </h3>
                         <p className="mt-2 text-foreground/70">
-                          Este desafío no tiene documentación adicional. Revisa las instrucciones y los errores para completarlo.
+                          Este desafío no tiene documentación adicional. Revisa
+                          las instrucciones y los errores para completarlo.
                         </p>
                       </div>
                     </div>
                   )}
                 </div>
-                
+
                 <div className="mt-6 pt-4 border-t border-border">
                   <p className="text-sm text-foreground/70 text-center">
-                    ¿Necesitas más ayuda? Intenta revisar la pestaña de instrucciones o los mensajes de error.
+                    ¿Necesitas más ayuda? Intenta revisar la pestaña de
+                    instrucciones o los mensajes de error.
                   </p>
                 </div>
               </div>
@@ -381,9 +463,13 @@ export default function ConsolaDev() {
                 <CheckCircle2 className="h-16 w-16 mx-auto text-green-500 mb-4" />
                 <h2 className="text-2xl font-bold mb-2">¡Felicidades!</h2>
                 <p className="mb-4">
-                  Has completado todos los desafíos y has acumulado {puntosNLP} puntos de Programación Neurolingüística.
+                  Has completado todos los desafíos y has acumulado {puntosNLP}{" "}
+                  puntos de Programación Neurolingüística.
                 </p>
-                <Button variant="ghost" onClick={() => window.location.reload()}>
+                <Button
+                  variant="ghost"
+                  onClick={() => window.location.reload()}
+                >
                   Volver a empezar
                 </Button>
               </div>
@@ -392,5 +478,5 @@ export default function ConsolaDev() {
         </div>
       )}
     </Card>
-  )
+  );
 }
