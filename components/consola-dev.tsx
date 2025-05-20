@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { AlertCircle, CheckCircle2, Code2, FileCode2, Terminal, FileText } from "lucide-react"
+import { AlertCircle, CheckCircle2, Code2, FileCode2, Terminal, FileText, Info, BookOpen, Lightbulb } from "lucide-react"
 import { EditorCodigo } from "@/components/editor-codigo"
 import { PanelErrores } from "@/components/panel-errores"
 import { ResultadoTarea } from "@/components/resultado-tarea"
@@ -169,38 +169,181 @@ export default function ConsolaDev() {
             </TabsList>
           </div>
 
-          <div className="min-h-[400px]">
-            <TabsContent value="codigo" className="p-4 m-0 h-full">
-              <EditorCodigo
-                codigo={codigo}
-                setCodigo={setCodigo}
-                lenguaje={tareaActual.lenguaje}
-                lineasEditables={tareaActual.lineasEditables}
-              />
-            </TabsContent>
-
-            <TabsContent value="errores" className="p-4 m-0 h-full">
-              <PanelErrores errores={tareaActual.errores} erroresCorregidos={erroresCorregidos} />
-            </TabsContent>
-
-            <TabsContent value="instrucciones" className="p-4 m-0 h-full">
-              <div className="prose dark:prose-invert max-w-none">
-                <h3>Instrucciones</h3>
-                <p>{tareaActual.instrucciones}</p>
-                <h4>Objetivo</h4>
-                <p>{tareaActual.objetivo}</p>
+          <div className="min-h-[500px] max-h-[500px] overflow-hidden">
+            <TabsContent value="codigo" className="p-0 m-0 h-full">
+              <div className="h-full flex flex-col">
+                <div className="p-4 border-b">
+                  <h3 className="text-lg font-semibold flex items-center text-foreground">
+                    <Code2 className="h-5 w-5 mr-2 text-primary" />
+                    Editor de Código
+                  </h3>
+                </div>
+                <div className="flex-1 overflow-auto">
+                  <EditorCodigo
+                    codigo={codigo}
+                    setCodigo={setCodigo}
+                    lenguaje={tareaActual.lenguaje}
+                    lineasEditables={tareaActual.lineasEditables}
+                  />
+                </div>
               </div>
             </TabsContent>
 
-            <TabsContent value="documentacion" className="p-4 m-0 h-full">
-              <div className="prose dark:prose-invert max-w-none">
-                <h3>Documentación</h3>
-                <div className="overflow-y-auto h-[320px]">
+            <TabsContent value="errores" className="p-0 m-0 h-full">
+              <div className="h-full flex flex-col">
+                <div className="p-4 border-b">
+                  <h3 className="text-lg font-semibold flex items-center text-foreground">
+                    <AlertCircle className="h-5 w-5 mr-2 text-primary" />
+                    Panel de Errores
+                    {erroresPendientes > 0 && (
+                      <span className="ml-2 bg-destructive text-destructive-foreground text-xs font-medium px-2 py-0.5 rounded-full">
+                        {erroresPendientes} pendientes
+                      </span>
+                    )}
+                  </h3>
+                </div>
+                <div className="flex-1 overflow-auto">
+                  <PanelErrores errores={tareaActual.errores} erroresCorregidos={erroresCorregidos} />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="instrucciones" className="p-0 m-0 h-full">
+              <div className="h-full flex flex-col">
+                <div className="p-4 border-b">
+                  <h3 className="text-lg font-semibold flex items-center text-foreground">
+                    <FileText className="h-5 w-5 mr-2 text-primary" />
+                    Instrucciones del Desafío
+                  </h3>
+                </div>
+                <div className="flex-1 overflow-auto p-6">
+                  <div className="space-y-8">
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold flex items-center text-foreground border-b pb-2">
+                        <Info className="w-5 h-5 mr-2 text-primary" />
+                        Descripción
+                      </h3>
+                      <div className="prose dark:prose-invert max-w-none text-foreground/90 space-y-4 pl-2">
+                        <p>{tareaActual.instrucciones}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold flex items-center text-foreground border-b pb-2">
+                        <BookOpen className="w-5 h-5 mr-2 text-primary" />
+                        Objetivos de Aprendizaje
+                      </h3>
+                      <div className="prose dark:prose-invert max-w-none text-foreground/90 space-y-4 pl-2">
+                        <p>{tareaActual.objetivo}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold flex items-center text-foreground border-b pb-2">
+                        <Lightbulb className="w-5 h-5 mr-2 text-primary" />
+                        Consejos Útiles
+                      </h3>
+                      <ul className="space-y-3 text-foreground/80 pl-2">
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          <span>Revisa la pestaña de errores para ver los problemas detectados</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          <span>Haz clic en "Verificar Solución" para validar tus cambios</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-primary mr-2 mt-1">•</span>
+                          <span>Utiliza la documentación como referencia cuando lo necesites</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="documentacion" className="p-0 m-0 h-[500px] overflow-hidden">
+              <div className="h-full flex flex-col p-6">
+                <h2 className="text-2xl font-bold mb-6 text-foreground">Documentación de Ayuda</h2>
+                <div className="flex-1 overflow-y-auto pr-2">
                   {tareaActual.documentacion ? (
-                    <div dangerouslySetInnerHTML={{ __html: tareaActual.documentacion }} />
+                    <div className="space-y-8">
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold flex items-center text-foreground border-b pb-2">
+                          <Info className="w-5 h-5 mr-2 text-primary" />
+                          Sobre el Desafío
+                        </h3>
+                        <div className="space-y-3 pl-2">
+                          <p className="flex items-start">
+                            <span className="font-medium text-foreground/90 min-w-[60px]">Tipo:</span>
+                            <span className="text-foreground/80">{tareaActual.tipo.charAt(0).toUpperCase() + tareaActual.tipo.slice(1)}</span>
+                          </p>
+                          <p className="flex items-start">
+                            <span className="font-medium text-foreground/90 min-w-[60px]">Objetivo:</span>
+                            <span className="text-foreground/80">{tareaActual.objetivo}</span>
+                          </p>
+                          <p className="flex items-start">
+                            <span className="font-medium text-foreground/90 min-w-[60px]">Punto NLP:</span>
+                            <span className="text-foreground/80">{tareaActual.puntoNLP}</span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold flex items-center text-foreground border-b pb-2">
+                          <BookOpen className="w-5 h-5 mr-2 text-primary" />
+                          Guía de Solución
+                        </h3>
+                        <div className="prose dark:prose-invert max-w-none text-foreground/90 space-y-4 pl-2">
+                          <div dangerouslySetInnerHTML={{ 
+                            __html: tareaActual.documentacion 
+                              ? tareaActual.documentacion.replace(/<p>/g, '<p class="mb-4 last:mb-0">')
+                              : '' 
+                          }} />
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold flex items-center text-foreground border-b pb-2">
+                          <Lightbulb className="w-5 h-5 mr-2 text-primary" />
+                          Consejos Rápidos
+                        </h3>
+                        <ul className="space-y-3 text-foreground/80 pl-2">
+                          {tareaActual.errores.map((error, index) => (
+                            <li key={index} className="flex items-start">
+                              <span className="text-primary mr-2 mt-1">•</span>
+                              <span><span className="font-medium">Línea {error.linea}:</span> {error.mensaje}</span>
+                            </li>
+                          ))}
+                          <li className="flex items-start">
+                            <span className="text-primary mr-2 mt-1">•</span>
+                            <span>Revisa la pestaña de errores para ver los problemas detectados</span>
+                          </li>
+                          <li className="flex items-start">
+                            <span className="text-primary mr-2 mt-1">•</span>
+                            <span>Haz clic en "Verificar Solución" para validar tus cambios</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   ) : (
-                    <p className="text-muted-foreground">No hay documentación disponible para este desafío.</p>
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center p-6 max-w-md">
+                        <Info className="mx-auto h-12 w-12 text-muted-foreground" />
+                        <h3 className="mt-3 text-lg font-medium text-foreground">Sin documentación disponible</h3>
+                        <p className="mt-2 text-foreground/70">
+                          Este desafío no tiene documentación adicional. Revisa las instrucciones y los errores para completarlo.
+                        </p>
+                      </div>
+                    </div>
                   )}
+                </div>
+                
+                <div className="mt-6 pt-4 border-t border-border">
+                  <p className="text-sm text-foreground/70 text-center">
+                    ¿Necesitas más ayuda? Intenta revisar la pestaña de instrucciones o los mensajes de error.
+                  </p>
                 </div>
               </div>
             </TabsContent>
