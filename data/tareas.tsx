@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import type { Tarea } from "@/types/tarea"
+import type { Tarea } from "@/types/tarea";
 
 // Tarea 1: Desafío Psicológico
 const tarea1: Tarea = {
@@ -10,7 +10,8 @@ const tarea1: Tarea = {
   titulo: "Sesgos Cognitivos",
   instrucciones:
     "Identifica y corrige los sesgos cognitivos en el siguiente código que representa un proceso de toma de decisiones.",
-  objetivo: "El código debe representar un proceso de toma de decisiones libre de sesgos cognitivos comunes.",
+  objetivo:
+    "El código debe representar un proceso de toma de decisiones libre de sesgos cognitivos comunes.",
   lenguaje: "JavaScript",
   codigoInicial: `function tomarDecision(opciones) {
   // Elegimos la primera opción que vimos (sesgo de anclaje)
@@ -62,17 +63,20 @@ const tarea1: Tarea = {
     {
       tipo: "error",
       linea: 3,
-      mensaje: "Sesgo de anclaje: Se está eligiendo automáticamente la primera opción como punto de referencia.",
+      mensaje:
+        "Sesgo de anclaje: Se está eligiendo automáticamente la primera opción como punto de referencia.",
     },
     {
       tipo: "error",
       linea: 7,
-      mensaje: "Sesgo de confirmación: Solo se consideran las ventajas e ignoran las desventajas.",
+      mensaje:
+        "Sesgo de confirmación: Solo se consideran las ventajas e ignoran las desventajas.",
     },
     {
       tipo: "error",
       linea: 13,
-      mensaje: "Sesgo de autoridad: Se acepta ciegamente la recomendación de un experto sin evaluación crítica.",
+      mensaje:
+        "Sesgo de autoridad: Se acepta ciegamente la recomendación de un experto sin evaluación crítica.",
     },
   ],
   mensajeExito:
@@ -84,21 +88,26 @@ const tarea1: Tarea = {
       <p>Sesgos cognitivos corregidos:</p>
       <ul className="list-disc pl-5 mt-2">
         <li>Sesgo de anclaje: Ahora evaluamos todas las opciones por igual</li>
-        <li>Sesgo de confirmación: Consideramos tanto ventajas como desventajas</li>
-        <li>Sesgo de autoridad: Evaluamos críticamente las recomendaciones de expertos</li>
+        <li>
+          Sesgo de confirmación: Consideramos tanto ventajas como desventajas
+        </li>
+        <li>
+          Sesgo de autoridad: Evaluamos críticamente las recomendaciones de
+          expertos
+        </li>
       </ul>
     </div>
   ),
-  lineasEditables: [2, 3, 6, 7, 8, 13, 14],
+  lineasEditables: [3, 7, 13], // Solo estas líneas serán editables
   verificarSolucion: (codigo: string) => {
     return (
       codigo.includes("opciones[i].desventajas") &&
       !codigo.includes("mejorOpcion = opciones[0]") &&
       codigo.includes("puntuacionExperto > mejorPuntuacion")
-    )
+    );
   },
   verificarErrorCorregido: (codigo: string, linea: number) => {
-    const lineasCodigo = codigo.split("\n")
+    const lineasCodigo = codigo.split("\n");
 
     // Verificar corrección según la línea
     switch (linea) {
@@ -106,16 +115,24 @@ const tarea1: Tarea = {
         // Verificar si se corrigió el sesgo de anclaje
         return (
           !lineasCodigo[2].includes("mejorOpcion = opciones[0]") &&
-          (lineasCodigo[2].includes("null") || lineasCodigo[2].includes("-Infinity"))
-        )
+          (lineasCodigo[2].includes("null") ||
+            lineasCodigo[2].includes("-Infinity"))
+        );
       case 7:
         // Verificar si se corrigió el sesgo de confirmación
-        return (codigo.includes("desventajas") && codigo.includes("puntuacionTotal")) || codigo.includes("ventajas - ")
+        return (
+          (codigo.includes("desventajas") &&
+            codigo.includes("puntuacionTotal")) ||
+          codigo.includes("ventajas - ")
+        );
       case 13:
         // Verificar si se corrigió el sesgo de autoridad
-        return codigo.includes("puntuacionExperto") && codigo.includes("mejorPuntuacion")
+        return (
+          codigo.includes("puntuacionExperto") &&
+          codigo.includes("mejorPuntuacion")
+        );
       default:
-        return false
+        return false;
     }
   },
   documentacion: `
@@ -164,7 +181,7 @@ if (puntuacionTotal > mejorPuntuacion) {
     
     <p>Al corregir estos sesgos, creamos un proceso de toma de decisiones más racional y equilibrado.</p>
   `,
-}
+};
 
 // Tarea 2: Desafío Filológico
 const tarea2: Tarea = {
@@ -174,7 +191,8 @@ const tarea2: Tarea = {
   titulo: "Análisis Lingüístico",
   instrucciones:
     "Corrige los errores lingüísticos en el siguiente código que implementa un analizador de texto básico.",
-  objetivo: "El código debe analizar correctamente las estructuras lingüísticas del texto proporcionado.",
+  objetivo:
+    "El código debe analizar correctamente las estructuras lingüísticas del texto proporcionado.",
   lenguaje: "JavaScript",
   codigoInicial: `function analizarTexto(texto) {
   // Dividir en palabras (incorrecto: ignora signos de puntuación)
@@ -256,22 +274,26 @@ const tarea2: Tarea = {
     {
       tipo: "error",
       linea: 3,
-      mensaje: "Error en tokenización: split(' ') no maneja correctamente los signos de puntuación.",
+      mensaje:
+        "Error en tokenización: split(' ') no maneja correctamente los signos de puntuación.",
     },
     {
       tipo: "error",
       linea: 7,
-      mensaje: "Error de normalización: no se convierten las palabras a minúsculas para el conteo de frecuencia.",
+      mensaje:
+        "Error de normalización: no se convierten las palabras a minúsculas para el conteo de frecuencia.",
     },
     {
       tipo: "error",
       linea: 15,
-      mensaje: "Error lingüístico: identificar verbos solo por terminaciones 'ar', 'er', 'ir' es impreciso.",
+      mensaje:
+        "Error lingüístico: identificar verbos solo por terminaciones 'ar', 'er', 'ir' es impreciso.",
     },
     {
       tipo: "error",
       linea: 20,
-      mensaje: "Error lingüístico: identificar sustantivos por longitud y exclusión de verbos es incorrecto.",
+      mensaje:
+        "Error lingüístico: identificar sustantivos por longitud y exclusión de verbos es incorrecto.",
     },
   ],
   mensajeExito:
@@ -296,27 +318,35 @@ const tarea2: Tarea = {
       codigo.includes("replace(/[.,;:!?()]/g") &&
       codigo.includes("terminacionesVerbales") &&
       codigo.includes("articulos")
-    )
+    );
   },
   verificarErrorCorregido: (codigo: string, linea: number) => {
-    const lineasCodigo = codigo.split("\n")
+    const lineasCodigo = codigo.split("\n");
 
     // Verificar corrección según la línea
     switch (linea) {
       case 3:
         // Verificar si se corrigió la tokenización
-        return codigo.includes("replace(/[") && codigo.includes("split(/\\s+/)")
+        return (
+          codigo.includes("replace(/[") && codigo.includes("split(/\\s+/)")
+        );
       case 7:
         // Verificar si se corrigió la normalización
-        return lineasCodigo[6].includes("toLowerCase()")
+        return lineasCodigo[6].includes("toLowerCase()");
       case 15:
         // Verificar si se mejoró la identificación de verbos
-        return codigo.includes("terminacionesVerbales") || codigo.includes("aba") || codigo.includes("ando")
+        return (
+          codigo.includes("terminacionesVerbales") ||
+          codigo.includes("aba") ||
+          codigo.includes("ando")
+        );
       case 20:
         // Verificar si se mejoró la identificación de sustantivos
-        return codigo.includes("articulos") || codigo.includes("posiblesSustantivos")
+        return (
+          codigo.includes("articulos") || codigo.includes("posiblesSustantivos")
+        );
       default:
-        return false
+        return false;
     }
   },
   documentacion: `
@@ -380,7 +410,7 @@ for (let i = 0; i < palabras.length - 1; i++) {
     
     <p>Este enfoque, aunque no es perfecto, es lingüísticamente más fundamentado que el original.</p>
   `,
-}
+};
 
 // Tarea 3: Desafío Filosófico
 const tarea3: Tarea = {
@@ -497,17 +527,20 @@ const tarea3: Tarea = {
     {
       tipo: "error",
       linea: 8,
-      mensaje: "Falacia utilitarista: Ignora completamente los daños a minorías si el beneficio total es alto.",
+      mensaje:
+        "Falacia utilitarista: Ignora completamente los daños a minorías si el beneficio total es alto.",
     },
     {
       tipo: "error",
       linea: 16,
-      mensaje: "Omisión ética: No considera los derechos individuales (perspectiva deontológica).",
+      mensaje:
+        "Omisión ética: No considera los derechos individuales (perspectiva deontológica).",
     },
     {
       tipo: "error",
       linea: 18,
-      mensaje: "Omisión ética: Ignora el consentimiento de los afectados por la decisión.",
+      mensaje:
+        "Omisión ética: Ignora el consentimiento de los afectados por la decisión.",
     },
   ],
   mensajeExito:
@@ -534,25 +567,37 @@ const tarea3: Tarea = {
       codigo.includes("respetaDerechosIndividuales") &&
       codigo.includes("consentimiento") &&
       codigo.includes("justicia")
-    )
+    );
   },
   verificarErrorCorregido: (codigo: string, linea: number) => {
     // Verificar corrección según la línea
     switch (linea) {
       case 2:
         // Verificar si se corrigió el reduccionismo ético
-        return codigo.includes("multi-perspectiva") || codigo.includes("diferentes teorías éticas")
+        return (
+          codigo.includes("multi-perspectiva") ||
+          codigo.includes("diferentes teorías éticas")
+        );
       case 8:
         // Verificar si se corrigió la falacia utilitarista
-        return codigo.includes("dañoTotal") || codigo.includes("personasAfectadasNegativamente")
+        return (
+          codigo.includes("dañoTotal") ||
+          codigo.includes("personasAfectadasNegativamente")
+        );
       case 16:
         // Verificar si se añadió consideración de derechos individuales
-        return codigo.includes("deontológica") || codigo.includes("respetaDerechosIndividuales")
+        return (
+          codigo.includes("deontológica") ||
+          codigo.includes("respetaDerechosIndividuales")
+        );
       case 18:
         // Verificar si se añadió consideración de consentimiento
-        return codigo.includes("tieneConsentimiento") || codigo.includes("consentimiento")
+        return (
+          codigo.includes("tieneConsentimiento") ||
+          codigo.includes("consentimiento")
+        );
       default:
-        return false
+        return false;
     }
   },
   documentacion: `
@@ -621,7 +666,7 @@ if (accion.tieneConsentimiento) {
     
     <p>Este enfoque multi-perspectiva proporciona una evaluación ética más completa y equilibrada, reconociendo que diferentes tradiciones filosóficas ofrecen perspectivas valiosas sobre cuestiones éticas complejas.</p>
   `,
-}
+};
 
 // Exportar todas las tareas
-export const tareas: Tarea[] = [tarea1, tarea2, tarea3]
+export const tareas: Tarea[] = [tarea1, tarea2, tarea3];

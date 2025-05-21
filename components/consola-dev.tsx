@@ -25,6 +25,7 @@ import { tareas } from "@/data/tareas";
 import { CambiadorTema } from "@/components/cambiador-tema";
 import { PuntosNLP } from "@/components/puntos-nlp";
 import { PantallaInicial } from "@/components/pantalla-inicial";
+import { Toast } from "@/components/toast";
 
 export default function ConsolaDev() {
   const [tareaActual, setTareaActual] = useState<Tarea | null>(null);
@@ -36,6 +37,7 @@ export default function ConsolaDev() {
   const [mostrarConsola, setMostrarConsola] = useState<boolean>(false);
   const [erroresActivos, setErroresActivos] = useState<Error[]>([]);
   const [erroresCorregidos, setErroresCorregidos] = useState<number[]>([]);
+  const [toast, setToast] = useState<{message: string; type: 'success' | 'error'; show: boolean}>({message: '', type: 'success', show: false});
 
   // Cargar el progreso guardado al iniciar
   useEffect(() => {
@@ -98,10 +100,12 @@ export default function ConsolaDev() {
       // Guardar progreso
       guardarProgreso(nivelActual, nuevosPuntos);
     } else {
-      // Mostrar mensaje de error
-      alert(
-        "La solución no es correcta. Revisa los errores e inténtalo de nuevo."
-      );
+      // Mostrar mensaje de error con toast
+      setToast({
+        message: 'La solución no es correcta. Revisa los errores e inténtalo de nuevo.',
+        type: 'error',
+        show: true
+      });
     }
   };
 
@@ -143,8 +147,21 @@ export default function ConsolaDev() {
   const erroresPendientes =
     tareaActual.errores.length - erroresCorregidos.length;
 
+  const closeToast = () => {
+    setToast(prev => ({...prev, show: false}));
+  };
+
   return (
-    <Card className="w-full max-w-5xl border border-dashed shadow-lg">
+    <>
+      {toast.show && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={closeToast}
+          duration={5000}
+        />
+      )}
+      <Card className="w-full max-w-5xl border border-dashed shadow-lg">
       <CardContent className="p-0">
         <div className="flex items-center justify-between border-b border-dashed p-4">
           <div className="flex items-center gap-2">
@@ -478,5 +495,6 @@ export default function ConsolaDev() {
         </div>
       )}
     </Card>
+    </>
   );
 }
