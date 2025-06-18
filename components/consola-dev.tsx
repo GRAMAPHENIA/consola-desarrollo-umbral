@@ -22,7 +22,7 @@ import { ResultadoTarea } from "@/components/resultado-tarea";
 import { obtenerTareaActual, guardarProgreso } from "@/lib/progreso";
 import type { Tarea, Error } from "@/types/tarea";
 import { tareas } from "@/data/tareas";
-import { CambiadorTema } from "@/components/cambiador-tema";
+import { CambiadorTema } from "@/components/ui/cambiador-tema";
 import { PuntosNLP } from "@/components/puntos-nlp";
 import { PantallaInicial } from "@/components/pantalla-inicial";
 import { Toast } from "@/components/toast";

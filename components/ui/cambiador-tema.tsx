@@ -3,7 +3,6 @@
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun } from "lucide-react"
-import React from "react"
 
 export function CambiadorTema() {
   const { theme, setTheme } = useTheme()
