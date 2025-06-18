@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { CambiadorTema } from '../../../../components/ui/cambiador-tema'; // Asegúrate de que esta ruta sea correcta
+import { CambiadorTema } from '@/components/cambiador-tema';
 
 // Mock de next-themes
 jest.mock('next-themes', () => ({
