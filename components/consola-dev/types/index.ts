@@ -1,29 +1,11 @@
-// Tipos para la consola de desarrollo
+// Importar tipos principales desde @/types/tarea
+import type { Tarea as TareaBase, Error as ErrorBase } from '@/types/tarea';
 
-export interface Error {
-  linea: number;
-  mensaje: string;
-  tipo: string;
-}
+// Re-exportar los tipos principales
+export type { ErrorBase, TareaBase };
 
-export interface Tarea {
-  id: string;
-  nivel: number;
-  titulo: string;
-  descripcion: string;
-  instrucciones: string;
-  objetivo: string;
-  codigoInicial: string;
-  codigoSolucion: string;
-  lenguaje: string;
-  tipo: string;
-  puntoNLP: string;
-  documentacion?: string;
-  errores: Error[];
-  lineasEditables: number[];
-  verificarSolucion: (codigo: string) => boolean;
-  verificarErrorCorregido: (codigo: string, linea: number) => boolean;
-}
+// Tipos adicionales específicos para la consola de desarrollo
+export type TareaTipo = 'psicológico' | 'filológico' | 'filosófico';
 
 export interface ToastState {
   message: string;
@@ -48,7 +30,7 @@ export interface CodeTabProps {
 }
 
 export interface ErrorsTabProps {
-  errores: Error[];
+  errores: ErrorBase[];
   erroresCorregidos: number[];
   erroresPendientes: number;
 }
@@ -59,7 +41,7 @@ export interface InstructionsTabProps {
 }
 
 export interface DocumentationTabProps {
-  tareaActual: Tarea;
+  tareaActual: TareaBase;
 }
 
 export interface FooterProps {

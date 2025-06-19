@@ -6,20 +6,29 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PantallaInicial } from '@/components/pantalla-inicial';
 import { Toast } from '@/components/toast';
 import { ResultadoTarea } from '@/components/resultado-tarea';
-import { useTaskProgress } from './hooks';
+import { useTaskProgress } from './hooks/useTaskProgress';
 import { useCodeVerification } from './hooks/useCodeVerification';
 import { useToast } from './hooks/useToast';
-import { Header, Footer, CompletionModal } from './components';
-import { CodeTab, ErrorsTab, InstructionsTab, DocumentationTab } from './components/Tabs';
+import type { Error as ErrorType } from '@/types/tarea';
+// Componentes de la interfaz
+import { Header } from './components/Header/Header';
+import { Footer } from './components/Footer/Footer';
+import { CompletionModal } from './components/CompletionModal/CompletionModal';
+
+// Componentes de pestañas
+import { CodeTab } from './components/Tabs/CodeTab/CodeTab';
+import { ErrorsTab } from './components/Tabs/ErrorsTab/ErrorsTab';
+import { InstructionsTab } from './components/Tabs/InstructionsTab/InstructionsTab';
+import { DocumentationTab } from './components/Tabs/DocumentationTab/DocumentationTab';
 import { tareas } from '@/data/tareas';
 
 /**
  * Componente principal de la consola de desarrollo
  */
 export default function ConsolaDev() {
-  // Estado del código y la interfaz
-  const [codigo, setCodigo] = useState<string>('');
-  const [mostrarConsola, setMostrarConsola] = useState<boolean>(false);
+  // Estados
+  const [codigo, setCodigo] = useState('');
+  const [mostrarConsola, setMostrarConsola] = useState(false);
   
   // Hooks personalizados
   const {
@@ -40,7 +49,7 @@ export default function ConsolaDev() {
     setMostrarResultado,
   } = useCodeVerification(tareaActual, codigo);
 
-  const { toast, hideToast } = useToast();
+  const { toast, showError, hideToast } = useToast();
 
   // Inicializar el código cuando cambia la tarea actual
   useEffect(() => {
@@ -62,16 +71,6 @@ export default function ConsolaDev() {
       // Mostrar mensaje de error
       showError('La solución no es correcta. Revisa los errores e inténtalo de nuevo.');
     }
-  };
-
-  // Mostrar mensajes de error
-  const showError = (message: string) => {
-    hideToast();
-    setTimeout(() => {
-      // Usar el hook de toast para mostrar el mensaje
-      // Esto es un ejemplo, ajusta según tu implementación real
-      console.error(message);
-    }, 100);
   };
 
   // Si no se ha mostrado la consola, mostrar pantalla inicial
@@ -189,7 +188,7 @@ export default function ConsolaDev() {
         <CompletionModal 
           puntosNLP={puntosNLP}
           esUltimaTarea={true}
-          onCerrar={() => window.location.reload()}
+          onClose={() => window.location.reload()}
           onSiguienteTarea={siguienteTarea}
         />
       )}
