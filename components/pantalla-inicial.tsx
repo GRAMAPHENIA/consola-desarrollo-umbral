@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Terminal, Code, AlertTriangle, BookOpen, ArrowRight, ChevronDown, ChevronUp } from "lucide-react"
 import { tareas } from "@/data/tareas"
@@ -10,10 +11,14 @@ interface PantallaInicialProps {
 }
 
 export function PantallaInicial({ onTaskSelect = () => {} }: PantallaInicialProps) {
+  const router = useRouter()
   const [tareaSeleccionada, setTareaSeleccionada] = useState<number | null>(null)
+
+  console.log('Inicializando componente PantallaInicial');
 
   // Función para renderizar una tarea
   const renderTarea = (tarea: any, index: number) => {
+    console.log('Renderizando tarea:', tarea.id);
     const esSeleccionada = tareaSeleccionada === index;
     
     return (
@@ -63,13 +68,20 @@ export function PantallaInicial({ onTaskSelect = () => {} }: PantallaInicialProp
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onTaskSelect(tarea.id);
+                    console.log('Navegando a la tarea:', tarea.id);
+                    // Navegar a la ruta específica de la tarea usando el router de Next.js
+                    if (tarea.id === 'tarea-var-let') {
+                      router.push('/alcance-de-variables');
+                    } else {
+                      // Para otras tareas, usar el manejador original
+                      onTaskSelect(tarea.id);
+                    }
                   }}
-                  className="group flex items-center px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all duration-200"
+                  className="group flex items-center px-4 py-2 text-sm font-medium bg-primary/10 text-yellow-400 border border-yellow-400/30 rounded-md hover:bg-yellow-400/20 transition-all duration-200"
                 >
-                  <Code className="w-4 h-4 mr-2" />
-                  Abrir Editor
-                  <ArrowRight className="w-4 h-4 ml-1 transition-transform duration-200 group-hover:translate-x-1" />
+                  <Code className="w-4 h-4 mr-2 text-yellow-400" />
+                  <span className="text-yellow-400">Abrir Editor</span>
+                  <ArrowRight className="w-4 h-4 ml-2 text-yellow-400 transition-transform duration-200 group-hover:translate-x-1" />
                 </button>
               </div>
             </div>

@@ -1,50 +1,46 @@
-import { Code2 } from 'lucide-react';
-import { EditorCodigo } from '@/components/editor-codigo';
-import { CodeTabProps } from '@/components/consola-dev/types';
+import { useState, useEffect } from 'react';
+
+interface CodeTabProps {
+  codigo: string;
+  setCodigo: (codigo: string) => void;
+}
 
 /**
  * Componente para la pestaña de código
- * @param codigo Código actual
- * @param setCodigo Función para actualizar el código
- * @param lenguaje Lenguaje de programación
- * @param lineasEditables Array con los números de línea editables
  */
 export const CodeTab = ({
   codigo,
   setCodigo,
-  lenguaje = 'javascript',
-  lineasEditables = [],
 }: CodeTabProps) => {
-  const handleCodeChange = (newCode: string) => {
+  const [localCodigo, setLocalCodigo] = useState(codigo);
+
+  // Sincronizar cambios del padre
+  useEffect(() => {
+    setLocalCodigo(codigo);
+  }, [codigo]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newCode = e.target.value;
+    setLocalCodigo(newCode);
     setCodigo(newCode);
   };
 
   return (
-    <div 
-      className="h-full flex flex-col"
-      role="region" 
-      aria-label="Editor de código"
-    >
-      <div 
-        className="p-4 border-b"
-        role="heading" 
-        aria-level={2}
-      >
-        <h2 className="text-lg font-semibold flex items-center text-foreground m-0">
-          <Code2 className="h-5 w-5 mr-2 text-primary" aria-hidden="true" />
-          Editor de Código
-        </h2>
+    <div className="h-full flex flex-col">
+      <div className="p-4 bg-gray-100 dark:bg-gray-700 border-b">
+        <h2 className="text-lg font-medium">Editor de Código</h2>
       </div>
-      <div 
-        className="flex-1 overflow-auto"
-        role="application"
-        aria-label={`Editor de ${lenguaje}`}
-      >
-        <EditorCodigo
-          codigo={codigo}
-          setCodigo={handleCodeChange}
-          lenguaje={lenguaje}
-          lineasEditables={lineasEditables}
+      <div className="flex-1 overflow-auto">
+        <textarea
+          value={localCodigo}
+          onChange={handleChange}
+          className="w-full h-full p-4 font-mono text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+          spellCheck="false"
+          style={{
+            minHeight: '300px',
+            lineHeight: '1.5',
+            tabSize: 2,
+          }}
         />
       </div>
     </div>
