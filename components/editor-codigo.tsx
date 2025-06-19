@@ -175,14 +175,13 @@ export function EditorCodigo({
   };
 
   return (
-    <div className="flex h-full bg-background text-foreground font-mono text-sm overflow-hidden">
+    <div className="flex flex-col w-full bg-background text-foreground font-mono text-sm">
       {/* Números de línea */}
       <div
         ref={numerosRef}
-        className="select-none text-right pr-4 py-2 text-muted-foreground bg-muted/50 overflow-y-auto"
+        className="flex select-none text-right pr-4 py-2 text-muted-foreground bg-muted/50 overflow-x-auto"
         style={{
-          minWidth: "3rem",
-          maxHeight: "100%",
+          minHeight: "2rem",
           scrollbarWidth: "thin",
         }}
       >
@@ -208,19 +207,19 @@ export function EditorCodigo({
       </div>
 
       {/* Editor de código */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="w-full">
         <pre
+          ref={editorRef}
           spellCheck="false"
           contentEditable
           suppressContentEditableWarning
           onInput={handleInput}
           onKeyDown={handleKeyDown}
-          className="flex-1 overflow-auto p-2 outline-none select-text"
+          className="w-full p-2 outline-none select-text whitespace-pre-wrap break-words"
           style={{
             tabSize: 2,
-            minHeight: "400px",
-            scrollbarWidth: "thin",
-            WebkitUserModify: "read-write-plaintext-only", // Esto ayuda a que el contenido sea más editable
+            WebkitUserModify: "read-write-plaintext-only",
+            minHeight: "auto",
           }}
         >
           {codigo.split("\n").map((linea, index) => {
@@ -236,7 +235,7 @@ export function EditorCodigo({
               <div
                 key={index}
                 className={cn(
-                  "leading-6 h-6 px-2 relative group",
+                  "min-h-6 px-2 py-1 relative group flex items-start",
                   esEditable
                     ? "bg-amber-100/70 dark:bg-amber-900/30 hover:bg-amber-200/70 dark:hover:bg-amber-800/40 border-l-4 border-amber-500 rounded-r font-medium"
                     : "text-muted-foreground select-none"

@@ -25,7 +25,7 @@ const CodeTab = ({ codigo, setCodigo }: { codigo: string; setCodigo: (code: stri
 );
 
 const Footer = () => (
-  <footer className="bg-gray-800 text-white p-4 text-center">
+  <footer className="bg-zinc-900/40 text-white p-4 text-center">
     <p>Consola de Desarrollo - {new Date().getFullYear()}</p>
   </footer>
 );

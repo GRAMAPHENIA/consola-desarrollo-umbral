@@ -136,7 +136,7 @@ export default function ConsolaDev() {
   };
 
   if (!mostrarConsola) {
-    return <PantallaInicial onComplete={handlePantallaInicialCompleta} />;
+    return <PantallaInicial onTaskSelect={handlePantallaInicialCompleta} />;
   }
 
   if (!tareaActual) {
