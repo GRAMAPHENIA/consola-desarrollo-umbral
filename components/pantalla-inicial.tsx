@@ -2,118 +2,108 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Terminal } from "lucide-react"
+import { Terminal, Code, AlertTriangle, BookOpen, ArrowRight, ChevronDown, ChevronUp } from "lucide-react"
+import { tareas } from "@/data/tareas"
 
-export function PantallaInicial({ onComplete }: { onComplete: () => void }) {
-  const [estado, setEstado] = useState<"cargando" | "mensaje" | "comandos">("cargando")
-  const [textoTipeado, setTextoTipeado] = useState("")
-  const mensajeCompleto = "Las funciones que escribís modifican la realidad."
+interface PantallaInicialProps {
+  onTaskSelect?: (taskId: string) => void;
+}
 
-  // Efecto para manejar la secuencia de carga
-  useEffect(() => {
-    // Paso 1: Mostrar "Cargando..." durante 5 segundos
-    const timerCarga = setTimeout(() => {
-      setEstado("mensaje")
-    }, 5000)
+export function PantallaInicial({ onTaskSelect = () => {} }: PantallaInicialProps) {
+  const [tareaSeleccionada, setTareaSeleccionada] = useState<number | null>(null)
 
-    return () => clearTimeout(timerCarga)
-  }, [])
-
-  // Efecto para el tipeo del mensaje
-  useEffect(() => {
-    if (estado === "mensaje") {
-      let index = 0
-      const intervaloTipeo = setInterval(() => {
-        if (index < mensajeCompleto.length) {
-          setTextoTipeado(mensajeCompleto.substring(0, index + 1))
-          index++
-        } else {
-          clearInterval(intervaloTipeo)
-
-          // Mantener el mensaje visible durante 3 segundos
-          const timerMensaje = setTimeout(() => {
-            setEstado("comandos")
-          }, 3000)
-
-          return () => clearTimeout(timerMensaje)
-        }
-      }, 50) // Velocidad de tipeo
-
-      return () => clearInterval(intervaloTipeo)
-    }
-  }, [estado, mensajeCompleto])
-
-  // Efecto para manejar las teclas presionadas
-  useEffect(() => {
-    if (estado === "comandos") {
-      const handleKeyPress = (event: KeyboardEvent) => {
-        // Solo activar la tecla "c" para cognitiveBiases
-        if (event.key.toLowerCase() === "c") {
-          onComplete()
-        }
-      }
-
-      window.addEventListener("keydown", handleKeyPress)
-      return () => {
-        window.removeEventListener("keydown", handleKeyPress)
-      }
-    }
-  }, [estado, onComplete])
-
-  // Función para manejar el clic en "Cognitive biases"
-  const handleCognitiveBiasesClick = () => {
-    onComplete()
-  }
-
-  // Renderizar las funciones con sus teclas rápidas
-  const renderFuncion = (letra: string, nombre: string, activa: boolean, onClick: () => void = () => {}) => {
+  // Función para renderizar una tarea
+  const renderTarea = (tarea: any, index: number) => {
+    const esSeleccionada = tareaSeleccionada === index;
+    
     return (
-      <div className="flex items-center mb-2">
-        <div
-          className={`w-8 h-8 flex items-center justify-center mr-4 border rounded-lg ${
-            activa ? "border-zinc-700 text-primary font-medium" : "border-zinc-500/30 text-muted-foreground/50"
+      <div 
+        key={tarea.id}
+        className={`p-4 border rounded-lg cursor-pointer transition-all duration-300 ease-in-out ${
+          esSeleccionada 
+            ? 'border-primary bg-primary/10' 
+            : 'border-border hover:border-primary/50'
+        }`}
+        onClick={() => setTareaSeleccionada(esSeleccionada ? null : index)}
+      >
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-mono font-medium">{tarea.titulo}</h3>
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-muted-foreground">Nivel {tarea.nivel}</span>
+            {esSeleccionada ? (
+              <ChevronUp className="w-4 h-4 text-muted-foreground transition-transform duration-300" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-muted-foreground transition-transform duration-300" />
+            )}
+          </div>
+        </div>
+        
+        <div 
+          className={`grid transition-all duration-500 ease-in-out ${
+            esSeleccionada ? 'grid-rows-[1fr] mt-4' : 'grid-rows-[0fr]'
           }`}
         >
-          {letra}
+          <div className="overflow-hidden">
+            <div className="space-y-3 pt-2">
+              <div className="flex items-start text-sm text-muted-foreground">
+                <BookOpen className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                <p>{tarea.objetivo}</p>
+              </div>
+              <div className="flex items-center text-sm text-muted-foreground">
+                <Code className="w-4 h-4 mr-2 flex-shrink-0" />
+                <p>{tarea.lenguaje}</p>
+              </div>
+              {tarea.errores?.length > 0 && (
+                <div className="flex items-center text-sm text-amber-500">
+                  <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
+                  <p>{tarea.errores.length} error(es) por corregir</p>
+                </div>
+              )}
+              <div className="pt-3 mt-2 border-t border-border/50">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onTaskSelect(tarea.id);
+                  }}
+                  className="group flex items-center px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all duration-200"
+                >
+                  <Code className="w-4 h-4 mr-2" />
+                  Abrir Editor
+                  <ArrowRight className="w-4 h-4 ml-1 transition-transform duration-200 group-hover:translate-x-1" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <p
-          className={
-            activa
-              ? "text-primary cursor-pointer hover:underline font-medium"
-              : "text-muted-foreground/70 cursor-not-allowed"
-          }
-          onClick={activa ? onClick : undefined}
-        >
-          {nombre}
-        </p>
       </div>
-    )
+    );
   }
 
   return (
-    <Card className="w-full max-w-5xl border border-dashed shadow-lg">
-      <CardContent className="p-6 min-h-[400px] flex flex-col items-center justify-center">
-        <Terminal className="h-10 w-10 mb-4" />
-
-        {estado === "cargando" && <div className="text-xl font-mono animate-pulse">Cargando...</div>}
-
-        {estado === "mensaje" && (
-          <div className="text-xl font-mono">
-            {textoTipeado}
-            <span className="animate-blink">_</span>
+    <div className="w-full max-w-4xl mx-auto p-6">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold mb-2 animate-fade-in">Consola de Desarrollo</h1>
+        <p className="text-muted-foreground animate-fade-in" style={{ animationDelay: '100ms' }}>
+          Selecciona una tarea para comenzar
+        </p>
+      </div>
+      
+      <div className="space-y-4">
+        {tareas.map((tarea, index) => (
+          <div 
+            key={tarea.id}
+            className={`transition-all duration-300 ${
+              tareaSeleccionada === index ? 'mb-6' : 'mb-4'
+            } animate-fade-in-up`}
+            style={{
+              animationDelay: `${index * 100}ms`,
+              opacity: 0
+            }}
+          >
+            {renderTarea(tarea, index)}
           </div>
-        )}
-
-        {estado === "comandos" && (
-          <div className="font-mono text-left w-full max-w-md">
-            <p className="mb-4">Funciones disponibles:</p>
-            {renderFuncion("C", "cognitiveBiases()", true, handleCognitiveBiasesClick)}
-            {renderFuncion("I", "ignoreReality()", false)}
-            {renderFuncion("D", "debugSelf()", false)}
-            {renderFuncion("A", "accessPhilosophicalLayer()", false)}
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  )
+        ))}
+      </div>
+    </div>
+  );
 }

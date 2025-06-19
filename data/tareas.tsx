@@ -2,6 +2,138 @@
 
 import type { Tarea } from "@/types/tarea";
 
+// Tarea 0: Comportamiento de var vs let
+const tareaVarLet: Tarea = {
+  id: "tarea-var-let",
+  nivel: 0,
+  tipo: "psicológico",
+  titulo: "Alcance de Variables: var vs let",
+  instrucciones: "Observa el siguiente código y corrige el uso de 'var' por 'let' para entender la diferencia en el alcance de las variables.",
+  objetivo: "Entender la diferencia en el alcance de las variables declaradas con 'var' y 'let'.",
+  lenguaje: "JavaScript",
+  codigoInicial: `function test() {
+  if (true) {
+    var x = 10; // Intenta cambiar 'var' por 'let'
+  }
+  console.log(x); // ¿Por qué x es accesible aquí?
+}
+test();`,
+  codigoSolucion: `function test() {
+  if (true) {
+    let x = 10; // 'let' limita el alcance al bloque
+  }
+  console.log(x); // ReferenceError: x is not defined
+}
+test();`,
+  errores: [
+    {
+      tipo: "error",
+      linea: 3,
+      mensaje: "Uso de 'var' que permite el hoisting y tiene alcance de función, no de bloque.",
+    },
+  ],
+  mensajeExito: "¡Perfecto! Has entendido la diferencia entre 'var' y 'let'. El uso de 'let' restringe el alcance de la variable al bloque donde fue declarada, lo que evita errores sutiles en el código.",
+  puntoNLP: "El uso de 'let' en lugar de 'var' promueve un código más predecible y menos propenso a errores.",
+  demostracion: (
+    <div className="text-sm">
+      <p>Comportamiento de las variables:</p>
+      <ul className="list-disc pl-5 mt-2">
+        <li><code>var</code>: Tiene alcance de función y sufre hoisting, permitiendo acceder a la variable fuera del bloque donde fue declarada.</li>
+      <li><code>let</code>: Tiene alcance de bloque, lo que significa que solo existe dentro del bloque donde fue declarada (entre llaves {}).</li>
+      </ul>
+    </div>
+  ),
+  lineasEditables: [3],
+  verificarSolucion: (codigo: string) => {
+    return codigo.includes("let x = 10") && !codigo.includes("var x = 10");
+  },
+  verificarErrorCorregido: (codigo: string, linea: number) => {
+    return codigo.includes("let x = 10");
+  },
+  documentacion: `
+    <h4>El Caso de la Variable Fantasma</h4>
+    
+    <p>Diálogo técnico entre agentes del Umbral — Caso: La Variable Fantasma</p>
+    
+    <h5>🎭 Personajes:</h5>
+    <p><strong>León Marechal</strong>: detective veterano, aferrado a lo conocido. Todavía cree que var es suficiente.</p>
+    <p><strong>Lúa Ferré</strong>: agente lógico, perfil bajo, mirada quirúrgica. Ve más allá del código y detecta los sesgos como si fueran espectros.</p>
+    
+    <h5>🔍 EL DESCUBRIMIENTO</h5>
+    
+    <p><strong>León Marechal</strong> (resoplando frente al monitor):</p>
+    <p>No entiendo la obsesión con let. var siempre funcionó. Cualquiera que haya sobrevivido al caso ParseFloat-72 sabe que no hace falta cambiar lo que ya sirve.</p>
+    
+    <p><strong>Lúa Ferré</strong> (desde la sombra, sin levantar la voz):</p>
+    <p>El código que "sirve" no siempre es el que dice la verdad, Marechal.</p>
+    
+    <h5>🧪 PRUEBA A — El Comportamiento de var</h5>
+    <pre><code>function test() {
+  if (true) {
+    var x = 10;
+  }
+  console.log(x); // Imprime 10
+}
+test();</code></pre>
+    
+    <p><strong>Lúa</strong>:</p>
+    <p>Acá x sobrevive fuera del bloque. Como un archivo filtrado por accidente. Nadie lo invitó a salir, pero igual cruzó la línea.</p>
+    
+    <p><strong>León</strong> (cruzado de brazos):</p>
+    <p>Sí. Lo conozco. "Hoisting". Un clásico. ¿Y?</p>
+    
+    <h5>🧪 PRUEBA B — El Alcance de let</h5>
+    <pre><code>function test() {
+  if (true) {
+    let x = 10;
+  }
+  console.log(x); // ReferenceError
+}
+test();</code></pre>
+    
+    <p><strong>Lúa</strong> (apuntando el error con calma):</p>
+    <p>Ahora el archivo queda contenido. No escapa del bloque. No hay rastro fuera del límite lógico.</p>
+    
+    <p><strong>León</strong> (más callado):</p>
+    <p>Entonces... let es más... predecible.</p>
+    
+    <p><strong>Lúa</strong>:</p>
+    <p>Es más honesto. El var te hace creer que las reglas son claras, pero juega a escondidas con el compilador.</p>
+    
+    <h5>🧠 EPÍLOGO DE ARCHIVO</h5>
+    <p>Conclusión del caso:</p>
+    <ul>
+      <li>El sesgo técnico se disfrazó de experiencia.</li>
+      <li>Fue vencido con evidencia clara y estructura lógica.</li>
+      <li>El agente afectado reconoció la distorsión sin resistencia.</li>
+      <li>Nivel de contaminación ideológica: neutralizado.</li>
+    </ul>
+    
+    <h4>¿Qué es el hoisting?</h4>
+    <p>En JavaScript, el hoisting (elevación) es el comportamiento por el cual ciertas declaraciones son movidas al inicio de su contexto de ejecución (ya sea una función o el ámbito global) antes de que el código se ejecute.</p>
+    
+    <h5>🧪 Con var</h5>
+    <pre><code>console.log(x); // undefined
+var x = 10;</code></pre>
+    
+    <p>➡️ Aunque parece que accedés a x antes de declararla, no da error. ¿Por qué?</p>
+    <p>Porque JavaScript internamente hace algo como esto:</p>
+    
+    <pre><code>var x;        // hoisting de la declaración (no del valor)
+console.log(x); // undefined
+x = 10;</code></pre>
+    
+    <h5>🚫 Con let y const</h5>
+    <pre><code>console.log(x); // ❌ ReferenceError
+let x = 10;</code></pre>
+    
+    <p>➡️ Acá no hay hoisting disponible para el uso temprano. La variable x está en lo que se llama el "temporal dead zone" (zona muerta temporal), desde el inicio del bloque hasta la línea donde se declara.</p>
+    
+    <h5>✅ Entonces: ¿es real?</h5>
+    <p>Sí. El hoisting es un comportamiento real del lenguaje, definido en la especificación de ECMAScript.</p>
+  `,
+};
+
 // Tarea 1: Desafío Psicológico
 const tarea1: Tarea = {
   id: "tarea-1",
@@ -669,4 +801,4 @@ if (accion.tieneConsentimiento) {
 };
 
 // Exportar todas las tareas
-export const tareas: Tarea[] = [tarea1, tarea2, tarea3];
+export const tareas: Tarea[] = [tareaVarLet, tarea1, tarea2, tarea3];

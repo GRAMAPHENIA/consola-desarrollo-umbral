@@ -29,6 +29,7 @@ export default function ConsolaDev() {
   // Estados
   const [codigo, setCodigo] = useState('');
   const [mostrarConsola, setMostrarConsola] = useState(false);
+  const [tareaCargada, setTareaCargada] = useState(false);
   
   // Hooks personalizados
   const {
@@ -51,12 +52,22 @@ export default function ConsolaDev() {
 
   const { toast, showError, hideToast } = useToast();
 
-  // Inicializar el código cuando cambia la tarea actual
+  // Efecto para cargar la tarea actual al montar el componente
   useEffect(() => {
-    if (tareaActual) {
-      setCodigo(tareaActual.codigoInicial);
+    if (tareaActual && tareaCargada) {
+      setCodigo(tareaActual.codigoInicial || '');
+      setMostrarConsola(true);
     }
-  }, [tareaActual]);
+  }, [tareaActual, tareaCargada]);
+
+  // Función para manejar la selección de tarea
+  const handleTaskSelect = (taskId: string) => {
+    const tarea = tareas.find(t => t.id === taskId);
+    if (tarea) {
+      setTareaActual(tarea);
+      setTareaCargada(true);
+    }
+  };
 
   // Manejar la verificación de la solución
   const handleVerificarSolucion = () => {
@@ -75,7 +86,7 @@ export default function ConsolaDev() {
 
   // Si no se ha mostrado la consola, mostrar pantalla inicial
   if (!mostrarConsola) {
-    return <PantallaInicial onComplete={() => setMostrarConsola(true)} />;
+    return <PantallaInicial onTaskSelect={handleTaskSelect} />;
   }
 
   // Si no hay tarea actual, mostrar carga
