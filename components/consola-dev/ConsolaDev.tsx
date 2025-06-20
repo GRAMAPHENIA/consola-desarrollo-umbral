@@ -63,7 +63,7 @@ export default function ConsolaDev() {
   // Renderizado condicional
   if (estado === 'inicio') {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <PantallaInicial onTaskSelect={handleTaskSelect} />
       </div>
     );
@@ -83,7 +83,7 @@ export default function ConsolaDev() {
   // Estado: editor
   return (
     <div className="min-h-screen flex flex-col">
-      <Header titulo={tareaActual.titulo} nivel={tareaActual.nivel} />
+      <Header titulo={tareaActual.titulo} nivel={tareaActual.nivel}/>
       
       <main className="flex-1 p-4 max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

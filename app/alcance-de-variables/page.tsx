@@ -14,10 +14,10 @@ function ThemeToggle() {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="ml-4 bg-zinc-900/40 hover:bg-zinc-900 text-foreground font-bold"
+      className="hover:bg-accent hover:text-accent-foreground font-medium"
     >
       <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -129,11 +129,11 @@ function NavBar({
 
   return (
     <>
-      <nav className="flex items-center justify-between bg-zinc-900/40 p-4 border-b border-zinc-800/50">
+      <nav className="flex items-center justify-between bg-background/80 dark:bg-zinc-900/40 p-4 border-b border-border/50 dark:border-zinc-800/50 backdrop-blur-sm">
         <Button
           variant="ghost"
           onClick={onBack}
-          className="gap-2 bg-zinc-900/40 hover:bg-zinc-900 text-foreground font-bold"
+          className="gap-2 hover:bg-accent hover:text-accent-foreground font-medium"
         >
           <ArrowLeft className="h-4 w-4" />
           Volver al inicio
@@ -144,7 +144,7 @@ function NavBar({
             size="icon"
             onClick={onToggleDocumentation}
             title="Ver documentación"
-            className="bg-zinc-900/40 hover:bg-zinc-900 text-foreground font-bold"
+            className="hover:bg-accent hover:text-accent-foreground font-medium"
           >
             <BookOpen className="h-5 w-5" />
             <span className="sr-only">Documentación</span>
@@ -154,7 +154,7 @@ function NavBar({
             size="icon"
             onClick={toggleDictionary}
             title="Abrir diccionario"
-            className="bg-zinc-900/40 hover:bg-zinc-900 text-foreground font-bold"
+            className="hover:bg-accent hover:text-accent-foreground font-medium"
           >
             <Book className="h-5 w-5" />
             <span className="sr-only">Diccionario</span>
@@ -197,7 +197,7 @@ function Modal({
             <span className="sr-only">Cerrar</span>
           </Button>
         </div>
-        <div className="p-6">{children}</div>
+        <div className="p-6 prose dark:prose-invert max-w-none">{children}</div>
       </div>
     </div>
   );
@@ -243,7 +243,7 @@ export default function AlcanceDeVariablesPage() {
       enableSystem
       disableTransitionOnChange
     >
-      <div className="min-h-screen bg-background text-foreground">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
         <NavBar
           onBack={handleBack}
           onToggleDocumentation={toggleDocumentation}
@@ -252,7 +252,7 @@ export default function AlcanceDeVariablesPage() {
         {/* Diálogo de documentación */}
         {showDocumentation && (
           <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-            <div className="bg-background rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="bg-background border border-border rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
               <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-background z-10">
                 <h2 className="text-xl font-bold">
                   Alcance de Variables: var vs let
@@ -608,7 +608,7 @@ let x = 10;`}
                             </p>
                           </div>
 
-                          <div className="p-3 bg-yellow-500/10 border-l-4 border-yellow-500/50">
+                          <div className="p-3 bg-yellow-100 dark:bg-yellow-500/10 border-l-4 border-yellow-400 dark:border-yellow-500/50 text-foreground">
                             <h5 className="font-medium text-yellow-500">
                               ✅ Entonces: ¿es real?
                             </h5>
@@ -628,7 +628,8 @@ let x = 10;`}
               <div className="p-4 border-t border-zinc-800/50 flex justify-end">
                 <Button
                   onClick={toggleDocumentation}
-                  className="bg-zinc-900/40 hover:bg-zinc-900 text-foreground font-bold"
+                  variant="outline"
+                  className="hover:bg-accent hover:text-accent-foreground font-medium"
                 >
                   Cerrar
                 </Button>
@@ -644,7 +645,7 @@ let x = 10;`}
 
         <main className="container mx-auto p-4 md:p-6">
           <div className="max-w-7xl mx-auto">
-            <div className="bg-zinc-900/20 border border-zinc-800/50 text-card-foreground rounded-lg shadow-sm h-full flex flex-col">
+            <div className="bg-card border border-border rounded-lg shadow-sm h-full flex flex-col">
               <div className="p-4 border-b border-zinc-800/50 flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Editor de Código</h2>
                 <div className="flex items-center gap-2">
@@ -653,7 +654,7 @@ let x = 10;`}
                     size="icon"
                     onClick={() => setShowInstructionsModal(true)}
                     title="Ver instrucciones"
-                    className="bg-zinc-900/40 hover:bg-zinc-900 text-foreground font-bold"
+                    className="hover:bg-zinc-900 text-foreground font-bold"
                   >
                     <BookOpen className="h-5 w-5" />
                     <span className="sr-only">Instrucciones</span>
@@ -663,7 +664,7 @@ let x = 10;`}
                     size="icon"
                     onClick={() => setShowObjectiveModal(true)}
                     title="Ver objetivo"
-                    className="bg-zinc-900/40 hover:bg-zinc-900 text-foreground font-bold"
+                    className="hover:bg-zinc-900 text-foreground font-bold"
                   >
                     <Target className="h-5 w-5" />
                     <span className="sr-only">Objetivo</span>
@@ -673,7 +674,7 @@ let x = 10;`}
               <div className="flex-1 flex flex-col">
                 <div className="flex-1 overflow-hidden">
                   <textarea
-                    className="w-full h-[220px] font-mono p-4 resize-none focus:outline-none bg-zinc-900/50 text-white"
+                    className="w-full h-[220px] font-mono p-4 resize-none focus:outline-none bg-background border border-input rounded-b-lg dark:bg-zinc-900/50 text-foreground"
                     value={codigo}
                     onChange={(e) => setCodigo(e.target.value)}
                     spellCheck="false"
@@ -682,7 +683,8 @@ let x = 10;`}
                 <div className="mt-4 px-4 pb-4">
                   <div className="flex justify-end">
                     <Button
-                      className="bg-zinc-900/40 hover:bg-zinc-900 text-foreground font-bold"
+                      variant="outline"
+                      className="bg-zinc-900/50 text-zinc-200/50 hover:bg-zinc-900/80 hover:text-zinc-200/80 font-medium"
                       onClick={() => {
                         // Aquí iría la lógica para verificar la solución
                         alert("Verificando solución...");

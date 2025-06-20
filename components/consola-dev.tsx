@@ -456,7 +456,7 @@ export default function ConsolaDev() {
             </Badge>
             <Badge variant="outline">{tareaActual.lenguaje}</Badge>
           </div>
-          <Button variant="ghost" onClick={verificarSolucion}>
+          <Button variant="default" onClick={verificarSolucion}>
             <CheckCircle2 className="h-4 w-4 mr-2" />
             Verificar Solución
           </Button>
