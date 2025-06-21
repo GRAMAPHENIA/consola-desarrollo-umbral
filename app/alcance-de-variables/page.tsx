@@ -17,10 +17,9 @@ function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="hover:bg-accent hover:text-accent-foreground font-medium"
     >
       <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 ease-in-out duration-300" />
       <span className="sr-only">Cambiar tema</span>
     </Button>
   );
@@ -133,7 +132,7 @@ function NavBar({
         <Button
           variant="ghost"
           onClick={onBack}
-          className="gap-2 hover:bg-accent hover:text-accent-foreground font-medium"
+          
         >
           <ArrowLeft className="h-4 w-4" />
           Volver al inicio
@@ -144,7 +143,7 @@ function NavBar({
             size="icon"
             onClick={onToggleDocumentation}
             title="Ver documentación"
-            className="hover:bg-accent hover:text-accent-foreground font-medium"
+            className=""
           >
             <BookOpen className="h-5 w-5" />
             <span className="sr-only">Documentación</span>
@@ -154,7 +153,7 @@ function NavBar({
             size="icon"
             onClick={toggleDictionary}
             title="Abrir diccionario"
-            className="hover:bg-accent hover:text-accent-foreground font-medium"
+            className=""
           >
             <Book className="h-5 w-5" />
             <span className="sr-only">Diccionario</span>
@@ -629,7 +628,6 @@ let x = 10;`}
                 <Button
                   onClick={toggleDocumentation}
                   variant="outline"
-                  className="hover:bg-accent hover:text-accent-foreground font-medium"
                 >
                   Cerrar
                 </Button>
@@ -650,11 +648,10 @@ let x = 10;`}
                 <h2 className="text-xl font-semibold">Editor de Código</h2>
                 <div className="flex items-center gap-2">
                   <Button
-                    variant="ghost"
+                    variant="ghost" 
                     size="icon"
                     onClick={() => setShowInstructionsModal(true)}
                     title="Ver instrucciones"
-                    className="hover:bg-zinc-900 text-foreground font-bold"
                   >
                     <BookOpen className="h-5 w-5" />
                     <span className="sr-only">Instrucciones</span>
@@ -664,7 +661,6 @@ let x = 10;`}
                     size="icon"
                     onClick={() => setShowObjectiveModal(true)}
                     title="Ver objetivo"
-                    className="hover:bg-zinc-900 text-foreground font-bold"
                   >
                     <Target className="h-5 w-5" />
                     <span className="sr-only">Objetivo</span>
@@ -684,7 +680,6 @@ let x = 10;`}
                   <div className="flex justify-end">
                     <Button
                       variant="outline"
-                      className="bg-zinc-900/50 text-zinc-200/50 hover:bg-zinc-900/80 hover:text-zinc-200/80 font-medium"
                       onClick={() => {
                         // Aquí iría la lógica para verificar la solución
                         alert("Verificando solución...");
